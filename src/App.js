@@ -29,7 +29,7 @@ const FILTER_MAP = {
 
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
-function App(props) {
+const App = (props) => {
   const [tasks, setTasks] = useState(initTodos);
   const [filter, setFilter] = useState("All");
 
@@ -65,11 +65,10 @@ function App(props) {
       <div className="filters btn-group stack-exception">{filterList}</div>
 
       <HeadingText
-        taskList={taskList}
         listHeadingRef={listHeadingRef}
       ></HeadingText>
 
-      <TodoList taskList={taskList}></TodoList>
+      <TodoList></TodoList>
     </div>
   );
 }

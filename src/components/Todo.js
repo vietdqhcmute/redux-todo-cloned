@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-
+import { useDispatch } from "react-redux";
+import { completeTask, deleteTask, editTask } from "../actions/index";
 
 function usePrevious(value) {
   const ref = useRef();
@@ -11,13 +12,25 @@ function usePrevious(value) {
 
 const Todo = (props) => {
   const [isEditing, setEditing] = useState(false);
-  const [newName, setNewName] = useState('');
+  const [newName, setNewName] = useState("");
 
   const editFieldRef = useRef(null);
   const editButtonRef = useRef(null);
-
+  const dispatch = useDispatch();
   const wasEditing = usePrevious(isEditing);
 
+  const handleTaskCompleted = () => {
+    dispatch(completeTask(props.id));
+  };
+
+  const handleDeleteTask = () => {
+    dispatch(deleteTask(props.id));
+  };
+
+  const handleEditTask = () => {
+    setEditing(true);
+    dispatch(editTask(props.id));
+  };
   function handleChange(e) {
     setNewName(e.target.value);
   }
@@ -48,7 +61,6 @@ const Todo = (props) => {
         />
       </div>
       <div className="btn-group">
-
         <button
           type="button"
           className="btn todo-cancel"
@@ -68,36 +80,35 @@ const Todo = (props) => {
   const viewTemplate = (
     <div className="stack-small">
       <div className="c-cb">
-          <input
-            id={props.id}
-            type="checkbox"
-            defaultChecked={props.completed}
-            onChange={() => props.toggleTaskCompleted(props.id)}
-          />
-          <label className="todo-label" htmlFor={props.id}>
-            {props.name}
-          </label>
-        </div>
-        <div className="btn-group">
+        <input
+          id={props.id}
+          type="checkbox"
+          defaultChecked={props.completed}
+          onChange={handleTaskCompleted}
+        />
+        <label className="todo-label" htmlFor={props.id}>
+          {props.content}
+        </label>
+      </div>
+      <div className="btn-group">
         <button
           type="button"
           className="btn"
-          onClick={() => setEditing(true)}
+          onClick={handleEditTask}
           ref={editButtonRef}
-          >
-            Edit <span className="visually-hidden">{props.name}</span>
-          </button>
-          <button
-            type="button"
-            className="btn btn__danger"
-            onClick={() => props.deleteTask(props.id)}
-          >
-            Delete <span className="visually-hidden">{props.name}</span>
-          </button>
-        </div>
+        >
+          Edit <span className="visually-hidden">{props.name}</span>
+        </button>
+        <button
+          type="button"
+          className="btn btn__danger"
+          onClick={handleDeleteTask}
+        >
+          Delete <span className="visually-hidden">{props.name}</span>
+        </button>
+      </div>
     </div>
   );
-
 
   useEffect(() => {
     if (!wasEditing && isEditing) {
@@ -108,8 +119,7 @@ const Todo = (props) => {
     }
   }, [wasEditing, isEditing]);
 
-
   return <li className="todo">{isEditing ? editingTemplate : viewTemplate}</li>;
-}
+};
 
 export default Todo;

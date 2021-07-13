@@ -1,12 +1,14 @@
-import React from 'react'
+import React from "react";
+import { useSelector } from "react-redux";
 
 const HeadingText = (props) => {
-  const tasksNoun = props.taskList.length !== 1 ? "tasks" : "task";
+  const taskList = useSelector((state) => state.tasks);
+  const tasksNoun = taskList.length !== 1 ? "tasks" : "task";
   return (
     <h2 id="list-heading" tabIndex="-1" ref={props.listHeadingRef}>
-      {props.taskList.length} {tasksNoun} remaining
+      {taskList.length} {tasksNoun} remaining
     </h2>
-  )
-}
+  );
+};
 
-export default HeadingText
+export default HeadingText;

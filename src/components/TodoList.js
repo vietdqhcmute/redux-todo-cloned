@@ -1,27 +1,21 @@
 import React from "react";
+import { useSelector } from "react-redux";
+
 import Todo from "./Todo";
 
 const TodoList = (props) => {
-  const handleTaskCompleted = () => {};
-
-  const handleDeleteTask = () => {};
-
-  const handleEditTask = () => {};
-
+  const taskList = useSelector((state) => state.tasks);
   return (
     <ul
       className="todo-list stack-large stack-exception"
       aria-labelledby="list-heading"
     >
-      {props.taskList.map((task) => (
+      {taskList.map((task) => (
         <Todo
           id={task.id}
-          name={task.name}
+          content={task.content}
           completed={task.completed}
           key={task.id}
-          toggleTaskCompleted={handleTaskCompleted}
-          deleteTask={handleDeleteTask}
-          editTask={handleEditTask}
         />
       ))}
     </ul>

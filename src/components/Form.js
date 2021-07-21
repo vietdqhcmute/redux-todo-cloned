@@ -1,29 +1,20 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { addTask } from "../actions";
+import { beginAddTask } from "../actions";
 
 const Form = (props) => {
-  const [name, setName] = useState("");
   const { register, handleSubmit, reset } = useForm();
   const dispatch = useDispatch();
 
   const handleOnAdd = (data) => {
-    const content = data.content;
-    if (!content.trim()) {
+    const title = data.title;
+    if (!title.trim()) {
       return;
     }
-    dispatch(addTask(content));
+    dispatch(beginAddTask(title));
     reset();
   };
-  // function handleSubmit(e) {
-  //
-  //
-  // }
-
-  function handleChange(e) {
-    setName(e.target.value);
-  }
 
   return (
     <form onSubmit={handleSubmit(handleOnAdd)}>
@@ -38,17 +29,8 @@ const Form = (props) => {
         className="input input__lg"
         name="text"
         autoComplete="off"
-        {...register("content")}
+        {...register("title")}
       ></input>
-      {/* <input
-        type="text"
-        id="new-todo-input"
-        className="input input__lg"
-        name="text"
-        autoComplete="off"
-        value={name}
-        onChange={handleChange}
-      /> */}
       <button type="submit" className="btn btn__primary btn__lg">
         Add
       </button>

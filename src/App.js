@@ -5,7 +5,6 @@ import FilterButton from "./components/FilterButton";
 import TodoList from "./components/TodoList";
 import HeadingText from "./components/HeadingText";
 
-import { nanoid } from "nanoid";
 import { beginFetchTasks } from "./actions/index";
 
 const initTodos = [
@@ -42,8 +41,6 @@ const App = (props) => {
   const [tasks, setTasks] = useState(initTodos);
   const [filter, setFilter] = useState("All");
 
-  const taskList = tasks.filter(FILTER_MAP[filter]);
-
   const filterList = FILTER_NAMES.map((name) => (
     <FilterButton
       key={name}
@@ -52,11 +49,6 @@ const App = (props) => {
       setFilter={setFilter}
     />
   ));
-
-  function addTask(name) {
-    const newTask = { id: "todo-" + nanoid(), name: name, completed: false };
-    setTasks([...tasks, newTask]);
-  }
 
   const listHeadingRef = useRef(null);
   const prevTaskLength = usePrevious(tasks.length);
@@ -69,7 +61,7 @@ const App = (props) => {
 
   return (
     <div className="todoapp stack-large">
-      <Form addTask={addTask} />
+      <Form />
       <div className="filters btn-group stack-exception">{filterList}</div>
       <HeadingText listHeadingRef={listHeadingRef}></HeadingText>
       <TodoList></TodoList>

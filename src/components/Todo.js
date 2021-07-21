@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { beginCompleteTask, deleteTask, editTask } from "../actions/index";
+import {
+  beginCompleteTask,
+  beginDeleteTask,
+  deleteTask,
+  editTask,
+} from "../actions/index";
 
 function usePrevious(value) {
   const ref = useRef();
@@ -24,7 +29,7 @@ const Todo = (props) => {
   };
 
   const handleDeleteTask = () => {
-    dispatch(deleteTask(props.id));
+    dispatch(beginDeleteTask(props.id));
   };
 
   const handleEditTask = () => {

@@ -2,7 +2,8 @@ import {
   BEGIN_ADD_TASK,
   BEGIN_COMPLETE_TASK,
   BEGIN_FETCH_TASK,
-  DELETE_TASK,
+  BEGIN_DELETE_TASK,
+  FINISH_DELETE_TASK,
   EDIT_TASK,
   FINISH_ADD_TASK,
   FINISH_COMPLETE_TASK,
@@ -28,5 +29,12 @@ export const finishCompleteTask = (payload) => ({
   type: FINISH_COMPLETE_TASK,
   payload,
 });
-export const deleteTask = (payload) => ({ type: DELETE_TASK, payload });
+export const beginDeleteTask = (payload) => ({
+  type: BEGIN_DELETE_TASK,
+  payload,
+});
+export const finishDeleteTask = (payload) => ({
+  type: FINISH_DELETE_TASK,
+  payload,
+});
 export const editTask = (payload) => ({ type: EDIT_TASK, payload });

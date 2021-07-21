@@ -1,6 +1,6 @@
 import {
   FINISH_COMPLETE_TASK,
-  DELETE_TASK,
+  FINISH_DELETE_TASK,
   EDIT_TASK,
   FINISH_ADD_TASK,
   FINISH_FETCH_TASK,
@@ -18,18 +18,10 @@ const rootReducer = (state = initialState, action) => {
       return { ...state, tasks: state.tasks.concat(action.payload) };
     }
     case FINISH_COMPLETE_TASK: {
-      const newState = { ...state };
-      const completedTask = newState.tasks.find((e) => e.id === action.payload);
-      completedTask.completed = !completedTask.completed;
-      return newState;
+      return { ...state, tasks: action.payload };
     }
-    case DELETE_TASK: {
-      const newState = { ...state };
-      const removeIndex = newState.tasks.findIndex(
-        (item) => item.id === action.payload
-      );
-      newState.tasks.splice(removeIndex, 1);
-      return newState;
+    case FINISH_DELETE_TASK: {
+      return { ...state, tasks: action.payload };
     }
     case EDIT_TASK: {
       console.log("EDIT_TASK");

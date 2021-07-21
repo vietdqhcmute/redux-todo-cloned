@@ -3,21 +3,23 @@ import {
   finishAddTask,
   finishCompleteTask,
   finishFetchTasks,
+  finishDeleteTask,
 } from "../actions";
 import {
   BEGIN_ADD_TASK,
   BEGIN_COMPLETE_TASK,
   BEGIN_FETCH_TASK,
+  BEGIN_DELETE_TASK,
 } from "../actions/types";
 import rsf from "../firestore";
-import { nanoid } from "nanoid";
 
 function* fetchTask({ onSuccess }) {
   try {
     const snapshot = yield call(rsf.firestore.getCollection, "tasks");
     const tasks = [];
     snapshot.forEach((doc) => {
-      tasks.push(doc.data());
+      const data = doc.data();
+      tasks.push({ id: doc.id, completed: data.completed, title: data.title });
     });
     onSuccess(true);
     yield put(finishFetchTasks(tasks));
@@ -29,7 +31,6 @@ function* fetchTask({ onSuccess }) {
 function* addTask(action) {
   try {
     const newTask = {
-      id: "todo-" + nanoid(),
       title: action.payload,
       completed: false,
     };
@@ -46,11 +47,36 @@ function* completeTask(action) {
       rsf.firestore.updateDocument,
       `tasks/${action.payload.id}`,
       "completed",
-      action.payload.completed
+      !action.payload.completed
     );
-    yield put(finishCompleteTask(action.payload));
+    const snapshot = yield call(rsf.firestore.getCollection, "tasks");
+    const tasks = [];
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      tasks.push({ id: doc.id, completed: data.completed, title: data.title });
+    });
+
+    yield put(finishCompleteTask(tasks));
   } catch (e) {
     console.error(e);
+  }
+}
+
+function* deleteTask(action) {
+  const id = action.payload;
+  try {
+    yield call(rsf.firestore.deleteDocument, `tasks/${id}`);
+
+    const snapshot = yield call(rsf.firestore.getCollection, "tasks");
+    const tasks = [];
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      tasks.push({ id: doc.id, completed: data.completed, title: data.title });
+    });
+
+    yield put(finishDeleteTask(tasks));
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -58,6 +84,7 @@ function* rootSaga() {
   yield takeLatest(BEGIN_FETCH_TASK, fetchTask);
   yield takeLatest(BEGIN_ADD_TASK, addTask);
   yield takeLatest(BEGIN_COMPLETE_TASK, completeTask);
+  yield takeLatest(BEGIN_DELETE_TASK, deleteTask);
 }
 
 export default rootSaga;

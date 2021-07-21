@@ -2,15 +2,17 @@ import axios from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
 import { finishFetchTasks } from "../actions";
 import { BEGIN_FETCH_TASK } from "../actions/types";
+import rsf from "../firestore";
 
 function* fetchTask({ onSuccess }) {
   try {
-    const response = yield call(
-      axios.get,
-      "https://jsonplaceholder.typicode.com/todos?userId=1"
-    );
+    const snapshot = yield call(rsf.firestore.getCollection, "tasks");
+    const tasks = [];
+    snapshot.forEach((doc) => {
+      tasks.push(doc.data());
+    });
     onSuccess(true);
-    yield put(finishFetchTasks(response.data));
+    yield put(finishFetchTasks(tasks));
   } catch (e) {
     console.error(e);
   }

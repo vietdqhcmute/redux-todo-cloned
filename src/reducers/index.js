@@ -18,7 +18,7 @@ const rootReducer = (state = initialState, action) => {
     case ADD_TASK: {
       const newTask = {
         id: "todo-" + nanoid(),
-        content: action.payload,
+        title: action.payload,
         completed: false,
       };
       return { ...state, tasks: state.tasks.concat(newTask) };

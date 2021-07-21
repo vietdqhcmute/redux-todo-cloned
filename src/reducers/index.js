@@ -1,5 +1,5 @@
 import {
-  COMPLETE_TASK,
+  FINISH_COMPLETE_TASK,
   DELETE_TASK,
   EDIT_TASK,
   FINISH_ADD_TASK,
@@ -17,7 +17,7 @@ const rootReducer = (state = initialState, action) => {
     case FINISH_ADD_TASK: {
       return { ...state, tasks: state.tasks.concat(action.payload) };
     }
-    case COMPLETE_TASK: {
+    case FINISH_COMPLETE_TASK: {
       const newState = { ...state };
       const completedTask = newState.tasks.find((e) => e.id === action.payload);
       completedTask.completed = !completedTask.completed;

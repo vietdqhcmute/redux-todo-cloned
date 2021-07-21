@@ -1,6 +1,14 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { finishAddTask, finishFetchTasks } from "../actions";
-import { BEGIN_ADD_TASK, BEGIN_FETCH_TASK } from "../actions/types";
+import {
+  finishAddTask,
+  finishCompleteTask,
+  finishFetchTasks,
+} from "../actions";
+import {
+  BEGIN_ADD_TASK,
+  BEGIN_COMPLETE_TASK,
+  BEGIN_FETCH_TASK,
+} from "../actions/types";
 import rsf from "../firestore";
 import { nanoid } from "nanoid";
 
@@ -32,9 +40,24 @@ function* addTask(action) {
   }
 }
 
+function* completeTask(action) {
+  try {
+    yield call(
+      rsf.firestore.updateDocument,
+      `tasks/${action.payload.id}`,
+      "completed",
+      action.payload.completed
+    );
+    yield put(finishCompleteTask(action.payload));
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 function* rootSaga() {
   yield takeLatest(BEGIN_FETCH_TASK, fetchTask);
   yield takeLatest(BEGIN_ADD_TASK, addTask);
+  yield takeLatest(BEGIN_COMPLETE_TASK, completeTask);
 }
 
 export default rootSaga;

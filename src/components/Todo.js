@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { completeTask, deleteTask, editTask } from "../actions/index";
+import { beginCompleteTask, deleteTask, editTask } from "../actions/index";
 
 function usePrevious(value) {
   const ref = useRef();
@@ -20,7 +20,7 @@ const Todo = (props) => {
   const wasEditing = usePrevious(isEditing);
 
   const handleTaskCompleted = () => {
-    dispatch(completeTask(props.id));
+    dispatch(beginCompleteTask({ id: props.id, completed: props.completed }));
   };
 
   const handleDeleteTask = () => {

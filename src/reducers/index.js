@@ -3,18 +3,18 @@ import {
   COMPLETE_TASK,
   DELETE_TASK,
   EDIT_TASK,
+  FINISH_FETCH_TASK,
 } from "../actions/types";
 import { nanoid } from "nanoid";
 
 const initialState = {
-  tasks: [
-    { id: "todo-0", content: "Eat", completed: true },
-    { id: "todo-1", content: "Sleep", completed: false },
-    { id: "todo-2", content: "Repeat", completed: false },
-  ],
+  tasks: [],
 };
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
+    case FINISH_FETCH_TASK: {
+      return { ...state, tasks: action.payload };
+    }
     case ADD_TASK: {
       const newTask = {
         id: "todo-" + nanoid(),

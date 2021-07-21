@@ -13,7 +13,7 @@ const TodoList = (props) => {
       {taskList.map((task) => (
         <Todo
           id={task.id}
-          content={task.content}
+          title={task.title}
           completed={task.completed}
           key={task.id}
         />

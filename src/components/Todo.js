@@ -87,7 +87,7 @@ const Todo = (props) => {
           onChange={handleTaskCompleted}
         />
         <label className="todo-label" htmlFor={props.id}>
-          {props.content}
+          {props.title}
         </label>
       </div>
       <div className="btn-group">

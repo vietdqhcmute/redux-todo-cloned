@@ -29,28 +29,18 @@ const FILTER_MAP = {
 
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
-function App(props) {
+function App() {
   const [tasks, setTasks] = useState(initTodos);
   const [filter, setFilter] = useState("All");
+  const listHeadingRef = useRef(null);
+  const prevTaskLength = usePrevious(tasks.length);
 
   const taskList = tasks.filter(FILTER_MAP[filter]);
 
-  const filterList = FILTER_NAMES.map((name) => (
-    <FilterButton
-      key={name}
-      name={name}
-      isPressed={name === filter}
-      setFilter={setFilter}
-    />
-  ));
-
-  function addTask(name) {
+  const addTask = (name) => {
     const newTask = { id: "todo-" + nanoid(), name: name, completed: false };
     setTasks([...tasks, newTask]);
-  }
-
-  const listHeadingRef = useRef(null);
-  const prevTaskLength = usePrevious(tasks.length);
+  };
 
   useEffect(() => {
     if (tasks.length - prevTaskLength === -1) {
@@ -62,7 +52,16 @@ function App(props) {
     <div className="todoapp stack-large">
       <Form addTask={addTask} />
 
-      <div className="filters btn-group stack-exception">{filterList}</div>
+      <div className="filters btn-group stack-exception">
+        {FILTER_NAMES.map((name) => (
+          <FilterButton
+            key={name}
+            name={name}
+            isPressed={name === filter}
+            setFilter={setFilter}
+          />
+        ))}
+      </div>
 
       <HeadingText
         taskList={taskList}

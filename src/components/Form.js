@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 
 const Form = (props) => {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!name.trim()) {
       return;
     }
     props.addTask(name);
     setName("");
-  }
+  };
 
-  function handleChange(e) {
+  const handleChange = (e) => {
     setName(e.target.value);
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -38,6 +38,6 @@ const Form = (props) => {
       </button>
     </form>
   );
-}
+};
 
 export default Form;

@@ -15,17 +15,16 @@ const rootReducer = (state = initialState, action) => {
       return { ...state, tasks: action.payload };
     }
     case FINISH_ADD_TASK: {
-      return { ...state, tasks: state.tasks.concat(action.payload) };
+      return state;
     }
     case FINISH_COMPLETE_TASK: {
-      return { ...state, tasks: action.payload };
+      return state;
     }
     case FINISH_DELETE_TASK: {
-      return { ...state, tasks: action.payload };
+      return state;
     }
     case EDIT_TASK: {
-      console.log("EDIT_TASK");
-      return;
+      return state;
     }
     default:
       return state;

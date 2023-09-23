@@ -11,12 +11,13 @@ import {
   BEGIN_FETCH_TASK,
   BEGIN_DELETE_TASK,
 } from "../actions/types";
+import { mockFetchingTasks } from "../mock/mockApiService";
 
 function* fetchTask({ onSuccess }) {
   try {
-    const tasks = [];
+    const response = yield call(mockFetchingTasks);
+    yield put(finishFetchTasks(response));
     onSuccess(true);
-    yield put(finishFetchTasks(tasks));
   } catch (e) {
     console.error(e);
   }

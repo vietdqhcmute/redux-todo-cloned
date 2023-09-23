@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
 import TodoList from "./components/TodoList";
@@ -31,27 +31,20 @@ const FILTER_NAMES = Object.keys(FILTER_MAP);
 
 const App = (props) => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(beginFetchTasks(onSuccess));
-  });
+  const { tasks } = useSelector((state) => state);
 
-  const onSuccess = (res) => {
-    console.log(res);
-  };
-  const [tasks, setTasks] = useState(initTodos);
   const [filter, setFilter] = useState("All");
-
-  const filterList = FILTER_NAMES.map((name) => (
-    <FilterButton
-      key={name}
-      name={name}
-      isPressed={name === filter}
-      setFilter={setFilter}
-    />
-  ));
 
   const listHeadingRef = useRef(null);
   const prevTaskLength = usePrevious(tasks.length);
+
+  const onSuccess = (res) => {
+    console.log("onSuccess", res);
+  };
+
+  useEffect(() => {
+    dispatch(beginFetchTasks(onSuccess));
+  }, []);
 
   useEffect(() => {
     if (tasks.length - prevTaskLength === -1) {
@@ -62,9 +55,18 @@ const App = (props) => {
   return (
     <div className="todoapp stack-large">
       <Form />
-      <div className="filters btn-group stack-exception">{filterList}</div>
+      <div className="filters btn-group stack-exception">
+        {FILTER_NAMES.map((name) => (
+          <FilterButton
+            key={name}
+            name={name}
+            isPressed={name === filter}
+            setFilter={setFilter}
+          />
+        ))}
+      </div>
       <HeadingText listHeadingRef={listHeadingRef}></HeadingText>
-      <TodoList></TodoList>
+      <TodoList />
     </div>
   );
 };
